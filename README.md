@@ -38,3 +38,6 @@ determine connection string:
 
 then, goose the migrations in sql/schema:
 goose postgres (connectionstring from above) up
+
+- uses SQLC to generate Go code from SQL queries to interface with our database
+go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
