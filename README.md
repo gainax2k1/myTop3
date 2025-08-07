@@ -32,12 +32,24 @@ ALTER USER postgres WITH PASSWORD 'postgres';
 
 go install github.com/pressly/goose/v3/cmd/goose@latest
 
-determine connection string:
+determine connection string, to be in .env file in root directory:
 (change to appropriate user:pass, host, port, db name)
-"postgres://postgres:postgres@localhost:5432/mytop3"
+DB_URL="postgres://postgres:postgres@localhost:5432/mytop3?sslmode=disable"
+-- For the scope of this project, I'm not utiilzing SSL certificates, which would be neccessary for actual production deployment. As it, data is not encrypted in transit, and would be vulnerable to eavesropping/man-in-the-middle attacks. To safely manage things, this would be set to sslmode=require or verify-full, along with proper certificate management. I may comeback and improve this down the road.
+
 
 then, goose the migrations in sql/schema:
 goose postgres (connectionstring from above) up
 
 - uses SQLC to generate Go code from SQL queries to interface with our database
 go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+
+- uses google uuid for ID management
+go get github.com/google/uuid
+
+- uses pq for postgres driver
+go get github.com/lib/pq
+
+- uses godotenv to read in .env file
+go get github.com/joho/godotenv
+
